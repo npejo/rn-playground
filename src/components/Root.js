@@ -1,42 +1,74 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  View,
+  Alert,
+  TabBarIOS
+} from 'react-native';
 
-function renderLoading () {
-  return <View>
-    <Text>Loading...</Text>
-  </View>
-}
-
-function renderContent () {
-  return <View style={styles.container}>
-    <Text>Open up App.js to start working on your app!</Text>
-    <Text>Changes you make will automatically reload.</Text>
-    <Text>Shake your phone to open the developer menu.</Text>
-  </View>
+const screens = {
+  'home': {
+    icon: 'featured',
+    content: 'Home'
+  },
+  'calendar': {
+    icon: 'downloads',
+    content: 'Calendar'
+  },
+  'history': {
+    icon: 'history',
+    content: 'History'
+  },
+  'settings': {
+    icon: 'more',
+    content: 'Settings'
+  }
 }
 export default class Root extends React.Component {
   constructor (props) {
     super(props)
 
     this.state = {
-      isLoading: true
+      currentScreen: 'home'
     }
   }
 
-  componentDidMount () {
-    setTimeout(() => (this.setState({ isLoading: false })), 2000)
+  renderScreen (name) {
+    const isSelected = this.state.currentScreen === name
+    return <TabBarIOS.Item
+      style={styles.content}
+      key={name}
+      onPress={this.onPressTab.bind(this, name)}
+      selected={isSelected}
+      systemIcon={screens[name].icon}
+      title={name}>
+      <Text>{screens[name].content}</Text>
+    </TabBarIOS.Item>
+  }
+
+  onPressTab (screenName) {
+    this.setState(() => ({currentScreen: screenName}))
   }
 
   render() {
-    return this.state.isLoading ? renderLoading() : renderContent()
+    return <View style={styles.container}>
+      <TabBarIOS style={styles.tabs}>
+        {Object.keys(screens).map((name) => {
+          return this.renderScreen(name)
+        })}
+      </TabBarIOS>
+    </View>
   }
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    backgroundColor: '#fff',
+    flex: 1
+  },
+  content: {
+    backgroundColor: '#ffffff',
     alignItems: 'center',
     justifyContent: 'center',
-  },
+  }
 });
