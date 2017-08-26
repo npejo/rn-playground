@@ -5,6 +5,7 @@ export default class Home extends React.Component {
   constructor (props) {
     super(props)
 
+    this.fields = []
     this.handleChange = this.handleChange.bind(this)
     this.renderField = this.renderField.bind(this)
   }
@@ -17,12 +18,23 @@ export default class Home extends React.Component {
     }
   }
 
+  tryToSelectNextTextInput (index) {
+    return () => {
+      if (index === this.props.records.length - 1) {
+        Keyboard.dismiss()
+      } else {
+        this.fields[index + 1].focus()
+      }
+    }
+  }
+
   renderField (index, value) {
     return <TextInput
       value={value}
       style={styles.field}
+      ref={(input) => this.fields[index] = input}
       onChangeText={this.handleChange(index)}
-      onSubmitEditing={Keyboard.dismiss}
+      onSubmitEditing={this.tryToSelectNextTextInput(index)}
     />
   }
 

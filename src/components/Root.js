@@ -102,7 +102,6 @@ export default class Root extends React.Component {
   }
 
   render() {
-    console.log('EEEEE')
     return <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <View style={styles.container}>
         <TabBarIOS style={styles.tabs}>
